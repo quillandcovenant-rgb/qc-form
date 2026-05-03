@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commission Inquiry — Quill & Covenant</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #FAF8F4 !important;
+      background-color: #FAF8F4 !important;
+      color: #2C1F0E !important;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .qc-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .qc-header {
+      text-align: center;
+      padding: 2rem 1rem 1.75rem;
+      border-bottom: 0.5px solid #D4C9B8;
+      margin-bottom: 2.5rem;
+    }
+
+    .qc-logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #2C1F0E;
+      margin-bottom: 5px;
+    }
+
+    .qc-tagline {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #7A6A55;
+      margin-bottom: 14px;
+    }
+
+    .qc-form-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      font-weight: 400;
+      color: #7A6A55;
+    }
+
+    .qc-section {
+      margin-bottom: 2.25rem;
+    }
+
+    .qc-section-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #7A6A55;
+      border-bottom: 0.5px solid #D4C9B8;
+      padding-bottom: 8px;
+      margin-bottom: 1.25rem;
+    }
+
+    .qc-field {
+      margin-bottom: 1.25rem;
+    }
+
+    .qc-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 400;
+      color: #7A6A55;
+      margin-bottom: 7px;
+      letter-spacing: 0.03em;
+    }
+
+    .qc-label .req { color: #B85C30; margin-left: 2px; }
+
+    .qc-hint {
+      font-size: 11px;
+      color: #9A8C7A;
+      margin-top: 5px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .qc-input, .qc-select, .qc-textarea {
+      width: 100%;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      padding: 11px 14px;
+      border: 0.5px solid #C8BAA6;
+      border-radius: 4px;
+      background: #FFFFFF;
+      color: #2C1F0E;
+      transition: border-color 0.15s;
+      appearance: none;
+    }
+
+    .qc-input:focus, .qc-select:focus, .qc-textarea:focus {
+      outline: none;
+      border-color: #8B6A3E;
+      box-shadow: 0 0 0 2px rgba(139,106,62,0.08);
+    }
+
+    .qc-textarea { resize: vertical; min-height: 85px; line-height: 1.6; }
+
+    .qc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .qc-radio-group, .qc-check-group { display: flex; flex-direction: column; gap: 9px; }
+
+    .qc-radio-label, .qc-check-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 300;
+      cursor: pointer;
+      color: #2C1F0E;
+      line-height: 1.55;
+    }
+
+    .qc-radio-label input, .qc-check-label input {
+      accent-color: #8B6A3E;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .qc-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+    /* Calligraphy conditional panel */
+    .qc-conditional {
+      display: none;
+      margin-top: 1.25rem;
+      padding: 1.25rem 1.25rem 0.5rem;
+      border-left: 2px solid #8B6A3E;
+      background: #F3EDE3;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .qc-conditional.visible { display: block; }
+
+    .qc-conditional-title {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #8B6A3E;
+      margin-bottom: 1.1rem;
+    }
+
+    /* Disclaimer */
+    .qc-disclaimer {
+      background: #F3EDE3;
+      border: 0.5px solid #D4C9B8;
+      border-left: 2px solid #8B6A3E;
+      border-radius: 4px;
+      padding: 1.1rem 1.25rem;
+      font-size: 11.5px;
+      line-height: 1.8;
+      color: #5A4A38;
+      margin-bottom: 1.25rem;
+    }
+
+    .qc-disclaimer .dis-title {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #2C1F0E;
+      margin-bottom: 12px;
+    }
+
+    .qc-disclaimer .dt {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #2C1F0E;
+    }
+
+    .qc-agree-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+      font-size: 13px;
+      color: #5A4A38;
+      line-height: 1.6;
+    }
+
+    .qc-agree-row input {
+      accent-color: #8B6A3E;
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .qc-submit {
+      width: 100%;
+      padding: 15px;
+      background: #2C1F0E;
+      color: #E8DCC8;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .qc-submit:hover { background: #3D2B10; }
+
+    .qc-note {
+      text-align: center;
+      font-size: 11px;
+      color: #9A8C7A;
+      margin-top: 0.85rem;
+      letter-spacing: 0.05em;
+      line-height: 1.6;
+    }
+
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+
+    .success-msg .s-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-style: italic;
+      color: #2C1F0E;
+      margin-bottom: 10px;
+    }
+
+    .success-msg .s-sub {
+      font-size: 14px;
+      color: #7A6A55;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 520px) {
+      .qc-grid { grid-template-columns: 1fr; }
+      .qc-logo-text { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+<div class="qc-wrap">
+
+  <div class="qc-header">
+    <p class="qc-logo-text">Quill &amp; Covenant</p>
+    <p class="qc-tagline">Where the hand tells the story</p>
+    <p class="qc-form-title">Commission Inquiry Form</p>
+  </div>
+
+  <form id="qcForm" action="https://formspree.io/f/xpqbqpze" method="POST">
+    <input type="hidden" name="_subject" value="New Commission Inquiry — Quill & Covenant" />
+
+    <!-- CONTACT INFORMATION -->
+    <div class="qc-section">
+      <p class="qc-section-label">Contact Information</p>
+
+      <div class="qc-grid">
+        <div class="qc-field">
+          <label class="qc-label">First name<span class="req">*</span></label>
+          <input class="qc-input" type="text" name="first_name" placeholder="Jane" required />
+        </div>
+        <div class="qc-field">
+          <label class="qc-label">Last name<span class="req">*</span></label>
+          <input class="qc-input" type="text" name="last_name" placeholder="Smith" required />
+        </div>
+      </div>
+
+      <div class="qc-field">
+        <label class="qc-label">Email address<span class="req">*</span></label>
+        <input class="qc-input" type="email" name="email" placeholder="jane@example.com" required />
+      </div>
+
+      <div class="qc-field">
+        <label class="qc-label">Phone number</label>
+        <input class="qc-input" type="tel" name="phone" placeholder="(801) 555-0100" />
+      </div>
+
+      <div class="qc-field">
+        <label class="qc-label">How did you hear about us?</label>
+        <select class="qc-select" name="referral_source">
+          <option value="">— Select one —</option>
+          <option>Instagram</option>
+          <option>Cara.app</option>
+          <option>Pinterest</option>
+          <option>Etsy</option>
+          <option>Referred by AA Photography</option>
+          <option>Personal referral</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- COMMISSION TYPE -->
+    <div class="qc-section">
+      <p class="qc-section-label">Commission Type</p>
+
+      <div class="qc-field">
+        <label class="qc-label">What type of commission interests you?<span class="req">*</span></label>
+        <div class="qc-radio-group">
+          <label class="qc-radio-label"><input type="radio" name="commission_type" value="Signature Pencil Portrait 8x10 ($200–$250)" required /> Signature Pencil Portrait — 8×10 ($200–$250)</label>
+          <label class="qc-radio-label"><input type="radio" name="commission_type" value="Fine Art Colored Pencil 8x10 (from $300)" /> Fine Art Colored Pencil — 8×10 (from $300)</label>
+          <label class="qc-radio-label"><input type="radio" name="commission_type" value="Large Scale Statement Piece 16x20 or 18x24 (from $800)" /> Large Scale Statement Piece — 16×20 / 18×24 (from $800)</label>
+          <label class="qc-radio-label"><input type="radio" name="commission_type" value="Hand-Lettered Calligraphy" /> Hand-Lettered Calligraphy — custom ($50–$150)</label>
+          <label class="qc-radio-label"><input type="radio" name="commission_type" value="Not sure yet" /> Not sure yet — help me decide</label>
+        </div>
+
+        <!-- CALLIGRAPHY CONDITIONAL PANEL -->
+        <div class="qc-conditional" id="letteringFields">
+          <p class="qc-conditional-title">Lettering Details</p>
+
+          <div class="qc-field">
+            <label class="qc-label">What text do you want lettered?</label>
+            <textarea class="qc-textarea" name="lettering_text" placeholder="e.g. 'The Johnson Family, Est. 2003' or a favourite scripture, quote, names..." style="min-height:65px;"></textarea>
+          </div>
+
+          <div class="qc-field">
+            <label class="qc-label">Lettering style preference</label>
+            <div class="qc-radio-group">
+              <label class="qc-radio-label"><input type="radio" name="lettering_style" value="Gothic Blackletter — bold, dramatic, medieval" /> Gothic Blackletter — bold, dramatic, medieval</label>
+              <label class="qc-radio-label"><input type="radio" name="lettering_style" value="Copperplate — flowing, elegant, romantic" /> Copperplate — flowing, elegant, romantic</label>
+              <label class="qc-radio-label"><input type="radio" name="lettering_style" value="Gothic + Copperplate hybrid — signature Quill & Covenant style" /> Gothic + Copperplate hybrid — signature Quill &amp; Covenant style</label>
+              <label class="qc-radio-label"><input type="radio" name="lettering_style" value="I trust the artist's judgment" /> I trust the artist's judgment</label>
+            </div>
+          </div>
+
+          <div class="qc-field">
+            <label class="qc-label">Mood or feel for the piece</label>
+            <div class="qc-check-group">
+              <label class="qc-check-label"><input type="checkbox" name="lettering_mood" value="Heirloom / legacy — something to frame and pass down" /> Heirloom / legacy — something to frame and pass down</label>
+              <label class="qc-check-label"><input type="checkbox" name="lettering_mood" value="Romantic / wedding — vows, anniversary, love letter style" /> Romantic / wedding — vows, anniversary, love letter style</label>
+              <label class="qc-check-label"><input type="checkbox" name="lettering_mood" value="Sacred / devotional — scripture, covenant, or faith-based text" /> Sacred / devotional — scripture, covenant, or faith-based text</label>
+              <label class="qc-check-label"><input type="checkbox" name="lettering_mood" value="Bold / statement — meant to command a room" /> Bold / statement — meant to command a room</label>
+              <label class="qc-check-label"><input type="checkbox" name="lettering_mood" value="Soft / intimate — quiet, personal, understated" /> Soft / intimate — quiet, personal, understated</label>
+            </div>
+          </div>
+
+          <div class="qc-field">
+            <label class="qc-label">Approximate finished size needed</label>
+            <select class="qc-select" name="lettering_size">
+              <option value="">— Select one —</option>
+              <option>5×7 — small gift or card insert</option>
+              <option>8×10 — standard frame, gift or display</option>
+              <option>9×12 — largest available size</option>
+              <option>Not sure — open to recommendation</option>
+            </select>
+          </div>
+
+          <div class="qc-field">
+            <label class="qc-label">Will this be part of a wedding suite or stationery set?</label>
+            <div class="qc-row">
+              <label class="qc-radio-label"><input type="radio" name="lettering_wedding" value="Yes" /> Yes</label>
+              <label class="qc-radio-label"><input type="radio" name="lettering_wedding" value="No" /> No</label>
+              <label class="qc-radio-label"><input type="radio" name="lettering_wedding" value="Maybe — interested in future suites" /> Maybe — interested in future suites</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PORTRAIT DETAILS -->
+    <div class="qc-section">
+      <p class="qc-section-label">Portrait Details</p>
+
+      <div class="qc-field">
+        <label class="qc-label">What is the occasion?</label>
+        <div class="qc-check-group">
+          <label class="qc-check-label"><input type="checkbox" name="occasion" value="Anniversary gift" /> Anniversary gift</label>
+          <label class="qc-check-label"><input type="checkbox" name="occasion" value="Wedding / engagement" /> Wedding / engagement</label>
+          <label class="qc-check-label"><input type="checkbox" name="occasion" value="Mother's / Father's Day" /> Mother's Day / Father's Day</label>
+          <label class="qc-check-label"><input type="checkbox" name="occasion" value="Memorial / legacy piece" /> Memorial / legacy piece</label>
+          <label class="qc-check-label"><input type="checkbox" name="occasion" value="Birthday" /> Birthday</label>
+          <label class="qc-check-label"><input type="checkbox" name="occasion" value="Personal heirloom" /> Just because — personal heirloom</label>
+          <label class="qc-check-label"><input type="checkbox" name="occasion" value="Other" /> Other</label>
+        </div>
+      </div>
+
+      <div class="qc-field">
+        <label class="qc-label">Who or what is the subject?</label>
+        <input class="qc-input" type="text" name="subject" placeholder="e.g. my wife, our wedding photo, family of 3..." />
+        <p class="qc-hint">Additional subjects may affect final pricing — we'll discuss this during your consultation.</p>
+      </div>
+
+      <div class="qc-field">
+        <label class="qc-label">Do you have a reference photo ready?</label>
+        <div class="qc-row">
+          <label class="qc-radio-label"><input type="radio" name="reference_photo" value="Yes, ready to share" /> Yes, ready to share</label>
+          <label class="qc-radio-label"><input type="radio" name="reference_photo" value="Need help selecting" /> I need help selecting one</label>
+        </div>
+        <p class="qc-hint">High-resolution photos produce the best results. We'll request it after confirming your slot.</p>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="qc-section">
+      <p class="qc-section-label">Timeline</p>
+
+      <div class="qc-grid">
+        <div class="qc-field">
+          <label class="qc-label">Target completion date</label>
+          <input class="qc-input" type="date" name="target_date" />
+        </div>
+        <div class="qc-field">
+          <label class="qc-label">Rush delivery needed?</label>
+          <select class="qc-select" name="rush">
+            <option value="">— Select —</option>
+            <option>No, standard timeline is fine</option>
+            <option>Yes — please contact me about rush options</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="qc-field">
+        <label class="qc-label">Anything else I should know?</label>
+        <textarea class="qc-textarea" name="additional_notes" placeholder="Special requests, ideas, questions, or context about the piece..."></textarea>
+      </div>
+    </div>
+
+    <!-- TERMS -->
+    <div class="qc-section">
+      <p class="qc-section-label">Terms &amp; Agreement</p>
+
+      <div class="qc-disclaimer">
+        <span class="dis-title">Commission Policy — Please Read Carefully</span>
+
+        <span class="dt">Deposit &amp; Payment.</span> A non-refundable deposit of 50% of the agreed price is required to secure your slot and begin work. The remaining 50% is due upon completion, prior to delivery. Delivery will be withheld until full payment is received.<br><br>
+
+        <span class="dt">All Sales Final.</span> All sales are final. Due to the custom, handcrafted nature of each piece, deposits are non-refundable under any circumstance. Cancellation after work has begun forfeits the deposit entirely.<br><br>
+
+        <span class="dt">Revisions.</span> One round of minor revisions is included before final delivery. Changes to the original scope may incur additional fees and adjusted timelines.<br><br>
+
+        <span class="dt">Reference Photos.</span> By submitting a reference photo, you represent that you hold the legal right to use that image. Quill &amp; Covenant assumes no liability for third-party copyright or privacy claims arising from client-submitted materials.<br><br>
+
+        <span class="dt">Artistic Rights.</span> The Artist retains the right to photograph and share completed work for portfolio and promotional purposes. Clients who wish to request confidentiality may do so in writing prior to delivery.<br><br>
+
+        <span class="dt">Timeline.</span> Standard turnaround is 3–4 weeks from deposit receipt. Timelines are estimates and subject to queue. Rush accommodations available at additional cost.<br><br>
+
+        <span class="dt">Privacy (California Residents — CCPA).</span> If you are a California resident, you have the right to know what personal information is collected, to request deletion of your data, and to opt out of any sale of your personal information. Quill &amp; Covenant does not sell personal data. To exercise your rights, email quillandcovenant@gmail.com.<br><br>
+
+        Submission does not constitute a binding contract. A formal commission agreement will be provided upon slot confirmation.
+      </div>
+
+      <div class="qc-agree-row">
+        <input type="checkbox" id="agreePolicy" name="agreed_to_terms" value="Yes" required />
+        <label for="agreePolicy">I have read and agree to the commission policy. I understand the deposit is non-refundable once work begins.<span class="req"> *</span></label>
+      </div>
+
+      <button type="submit" class="qc-submit">Submit Inquiry &rarr;</button>
+      <p class="qc-note">You will receive a response within 48 hours.<br>Submission does not guarantee availability.</p>
+    </div>
+  </form>
+
+  <div class="success-msg" id="successMsg">
+    <p class="s-title">Thank you for your inquiry.</p>
+    <p class="s-sub">I'll be in touch within 48 hours.<br><em>— Quill &amp; Covenant</em></p>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('input[name="commission_type"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var panel = document.getElementById('letteringFields');
+      panel.classList.toggle('visible', this.value === 'Hand-Lettered Calligraphy');
+    });
+  });
+
+  document.getElementById('qcForm').addEventListener('submit', function(e) {
+    if (!document.getElementById('agreePolicy').checked) {
+      e.preventDefault();
+      alert('Please agree to the commission policy to continue.');
+    }
+  });
+</script>
+</body>
+</html>
